@@ -87,10 +87,10 @@ func (b *pqBackend) pathDecryptWrite(ctx context.Context, req *logical.Request, 
 
 // decrypt decrypts ciphertext using the specified algorithm and key
 func (b *pqBackend) decrypt(keyType string, key, ciphertext []byte) ([]byte, error) {
-	algorithm, exists := b.algorithms.Get(keyType)
+	encryptor, exists := b.algorithmsContainer.Get(keyType)
 	if !exists {
 		return nil, fmt.Errorf("unsupported encryption algorithm: %s", keyType)
 	}
 
-	return algorithm.decrypt(key, ciphertext)
+	return encryptor.GetAlgorithms().decrypt(key, ciphertext)
 }

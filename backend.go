@@ -2,7 +2,6 @@ package secretsengine
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"sync"
 
@@ -19,12 +18,6 @@ func Factory(ctx context.Context, conf *logical.BackendConfig) (logical.Backend,
 	return b, nil
 }
 
-type keyGenFunc func() ([]byte, error)
-type algorithms struct {
-	encrypt func(key, data []byte) ([]byte, error)
-	decrypt func(key, data []byte) ([]byte, error)
-}
-
 // pqBackend defines an object that
 // extends the Vault backend and stores the
 // target API's client.
@@ -32,9 +25,10 @@ type pqBackend struct {
 	*framework.Backend
 	lock sync.RWMutex
 
-	cache      *keyVal[string, *encryptionKey]
-	keyDefs    *keyVal[string, keyGenFunc]
-	algorithms *keyVal[string, *algorithms]
+	cache *keyVal[string, *encryptionKey]
+	// keyDefs    *keyVal[string, keyGenFunc]
+	// algorithms *keyVal[string, *algorithms]
+	algorithmsContainer *container
 }
 
 // NewPqBackend defines the target API NewPqBackend
@@ -42,9 +36,12 @@ type pqBackend struct {
 // and the secrets it will store.
 func NewPqBackend() *pqBackend {
 	var b = pqBackend{
-		cache:      newKeyVal[string, *encryptionKey](),
-		keyDefs:    newKeyVal[string, keyGenFunc](),
-		algorithms: newKeyVal[string, *algorithms](),
+		cache: newKeyVal[string, *encryptionKey](),
+		algorithmsContainer: newContainer(
+			withAlgorithm(&kyber512{}),
+			withAlgorithm(&kyber768{}),
+			withAlgorithm(&kyber1024{}),
+		),
 	}
 
 	b.Backend = &framework.Backend{
@@ -69,6 +66,7 @@ func NewPqBackend() *pqBackend {
 		BackendType: logical.TypeLogical,
 		Invalidate:  b.invalidate,
 	}
+
 	return &b
 }
 
@@ -89,17 +87,17 @@ func (b *pqBackend) invalidate(ctx context.Context, key string) {
 
 // getClient locks the backend as it configures and creates a
 // a new client for the target API
-func (b *pqBackend) getClient(ctx context.Context, s logical.Storage) (*hashiCupsClient, error) {
-	b.lock.RLock()
-	unlockFunc := b.lock.RUnlock
-	defer func() { unlockFunc() }()
+// func (b *pqBackend) getClient(ctx context.Context, s logical.Storage) (*hashiCupsClient, error) {
+// 	b.lock.RLock()
+// 	unlockFunc := b.lock.RUnlock
+// 	defer func() { unlockFunc() }()
 
-	b.lock.RUnlock()
-	b.lock.Lock()
-	unlockFunc = b.lock.Unlock
+// 	b.lock.RUnlock()
+// 	b.lock.Lock()
+// 	unlockFunc = b.lock.Unlock
 
-	return nil, fmt.Errorf("need to return client")
-}
+// 	return nil, fmt.Errorf("need to return client")
+// }
 
 // backendHelp should contain help information for the backend
 const backendHelp = `

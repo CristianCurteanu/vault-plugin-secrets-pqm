@@ -120,23 +120,3 @@ func (e *testEnv) ReadUserToken(t *testing.T) {
 		e.SecretToken = t.(string)
 	}
 }
-
-// CleanupUserTokens removes the tokens
-// when the test completes.
-func (e *testEnv) CleanupUserTokens(t *testing.T) {
-	if len(e.Tokens) == 0 {
-		t.Fatalf("expected 2 tokens, got: %d", len(e.Tokens))
-	}
-
-	for _, token := range e.Tokens {
-		b := e.Backend.(*pqBackend)
-		client, err := b.getClient(e.Context, e.Storage)
-		if err != nil {
-			t.Fatal("fatal getting client")
-		}
-		client.Client.Token = string(token)
-		if err := client.SignOut(); err != nil {
-			t.Fatalf("unexpected error deleting user token: %s", err)
-		}
-	}
-}

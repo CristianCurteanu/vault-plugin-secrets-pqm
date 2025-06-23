@@ -96,10 +96,10 @@ func (b *pqBackend) pathKeysWrite(ctx context.Context, req *logical.Request, dat
 
 // generateKey generates a new encryption key based on the key type
 func (b *pqBackend) generateKey(keyType string) ([]byte, error) {
-	keyGen, exists := b.keyDefs.Get(keyType)
+	encryptor, exists := b.algorithmsContainer.Get(keyType)
 	if !exists {
 		return nil, fmt.Errorf("unsupported key type: %s", keyType)
 	}
 
-	return keyGen()
+	return encryptor.GetKeyGen()
 }

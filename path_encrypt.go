@@ -86,10 +86,10 @@ func (b *pqBackend) pathEncryptWrite(ctx context.Context, req *logical.Request, 
 }
 
 func (b *pqBackend) encrypt(keyType string, key, plaintext []byte) ([]byte, error) {
-	algorithm, exists := b.algorithms.Get(keyType)
+	encryptor, exists := b.algorithmsContainer.Get(keyType)
 	if !exists {
 		return nil, fmt.Errorf("unsupported encryption algorithm: %s", keyType)
 	}
 
-	return algorithm.encrypt(key, plaintext)
+	return encryptor.GetAlgorithms().encrypt(key, plaintext)
 }
