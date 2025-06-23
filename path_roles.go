@@ -34,7 +34,7 @@ func (r *hashiCupsRoleEntry) toResponseData() map[string]interface{} {
 // or not certain attributes should be displayed,
 // required, and named. You can also define different
 // path patterns to list all roles.
-func pathRole(b *hashiCupsBackend) []*framework.Path {
+func pathRole(b *pqBackend) []*framework.Path {
 	return []*framework.Path{
 		{
 			Pattern:         "role/" + framework.GenericNameRegex("name"),

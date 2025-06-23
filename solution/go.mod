@@ -1,4 +1,4 @@
-module github.com/hashicorp/vault-guides/plugins/vault-plugin-secrets-hashicups
+module github.com/Cristian-Curteanu/vault-plugin-secrets-pqm
 
 go 1.16
 

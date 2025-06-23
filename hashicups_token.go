@@ -22,16 +22,16 @@ type hashiCupsToken struct {
 
 // hashiCupsToken defines a secret to store for a given role
 // and how it should be revoked or renewed.
-func (b *hashiCupsBackend) hashiCupsToken() *framework.Secret {
+func (b *pqBackend) hashiCupsToken() *framework.Secret {
 	return &framework.Secret{}
 }
 
 // tokenRevoke removes the token from the Vault storage API and calls the client to revoke the token
-func (b *hashiCupsBackend) tokenRevoke(ctx context.Context, req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
+func (b *pqBackend) tokenRevoke(ctx context.Context, req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
 	return nil, fmt.Errorf("no user token workflow implemented")
 }
 
 // tokenRenew calls the client to create a new token and stores it in the Vault storage API
-func (b *hashiCupsBackend) tokenRenew(ctx context.Context, req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
+func (b *pqBackend) tokenRenew(ctx context.Context, req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
 	return nil, nil
 }

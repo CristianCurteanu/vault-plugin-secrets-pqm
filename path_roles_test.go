@@ -85,7 +85,7 @@ func TestUserRole(t *testing.T) {
 }
 
 // Utility function to create a role while, returning any response (including errors)
-func testTokenRoleCreate(t *testing.T, b *hashiCupsBackend, s logical.Storage, name string, d map[string]interface{}) (*logical.Response, error) {
+func testTokenRoleCreate(t *testing.T, b *pqBackend, s logical.Storage, name string, d map[string]interface{}) (*logical.Response, error) {
 	t.Helper()
 	resp, err := b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.CreateOperation,
@@ -102,7 +102,7 @@ func testTokenRoleCreate(t *testing.T, b *hashiCupsBackend, s logical.Storage, n
 }
 
 // Utility function to update a role while, returning any response (including errors)
-func testTokenRoleUpdate(t *testing.T, b *hashiCupsBackend, s logical.Storage, d map[string]interface{}) (*logical.Response, error) {
+func testTokenRoleUpdate(t *testing.T, b *pqBackend, s logical.Storage, d map[string]interface{}) (*logical.Response, error) {
 	t.Helper()
 	resp, err := b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.UpdateOperation,
@@ -122,7 +122,7 @@ func testTokenRoleUpdate(t *testing.T, b *hashiCupsBackend, s logical.Storage, d
 }
 
 // Utility function to read a role and return any errors
-func testTokenRoleRead(t *testing.T, b *hashiCupsBackend, s logical.Storage) (*logical.Response, error) {
+func testTokenRoleRead(t *testing.T, b *pqBackend, s logical.Storage) (*logical.Response, error) {
 	t.Helper()
 	return b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.ReadOperation,
@@ -132,7 +132,7 @@ func testTokenRoleRead(t *testing.T, b *hashiCupsBackend, s logical.Storage) (*l
 }
 
 // Utility function to list roles and return any errors
-func testTokenRoleList(t *testing.T, b *hashiCupsBackend, s logical.Storage) (*logical.Response, error) {
+func testTokenRoleList(t *testing.T, b *pqBackend, s logical.Storage) (*logical.Response, error) {
 	t.Helper()
 	return b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.ListOperation,
@@ -142,7 +142,7 @@ func testTokenRoleList(t *testing.T, b *hashiCupsBackend, s logical.Storage) (*l
 }
 
 // Utility function to delete a role and return any errors
-func testTokenRoleDelete(t *testing.T, b *hashiCupsBackend, s logical.Storage) (*logical.Response, error) {
+func testTokenRoleDelete(t *testing.T, b *pqBackend, s logical.Storage) (*logical.Response, error) {
 	t.Helper()
 	return b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.DeleteOperation,

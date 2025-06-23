@@ -19,7 +19,7 @@ const (
 
 // getTestBackend will help you construct a test backend object.
 // Update this function with your target backend.
-func getTestBackend(tb testing.TB) (*hashiCupsBackend, logical.Storage) {
+func getTestBackend(tb testing.TB) (*pqBackend, logical.Storage) {
 	tb.Helper()
 
 	config := logical.TestBackendConfig()
@@ -32,7 +32,7 @@ func getTestBackend(tb testing.TB) (*hashiCupsBackend, logical.Storage) {
 		tb.Fatal(err)
 	}
 
-	return b.(*hashiCupsBackend), config.StorageView
+	return b.(*pqBackend), config.StorageView
 }
 
 // runAcceptanceTests will separate unit tests from
@@ -129,7 +129,7 @@ func (e *testEnv) CleanupUserTokens(t *testing.T) {
 	}
 
 	for _, token := range e.Tokens {
-		b := e.Backend.(*hashiCupsBackend)
+		b := e.Backend.(*pqBackend)
 		client, err := b.getClient(e.Context, e.Storage)
 		if err != nil {
 			t.Fatal("fatal getting client")
