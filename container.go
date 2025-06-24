@@ -1,5 +1,9 @@
 package secretsengine
 
+import (
+	"github.com/hashicorp/go-hclog"
+)
+
 type encryptor interface {
 	GetName() string
 	GetKeyGen() ([]byte, error)
@@ -12,25 +16,29 @@ type algorithms struct {
 }
 
 type container struct {
-	algs *keyVal[string, encryptor]
+	algs   *keyVal[string, encryptor]
+	logger hclog.Logger
 }
 
-func newContainer(algOpts ...func(*container)) *container {
-	c := &container{}
+func newContainer() *container {
+	c := container{
+		algs:   newKeyVal[string, encryptor](),
+		logger: hclog.New(&hclog.LoggerOptions{}),
+	}
 
-	for _, opt := range algOpts {
-		opt(c)
+	return &c
+}
+
+func (c *container) Register(encryptors ...encryptor) *container {
+	for _, enc := range encryptors {
+		if enc != nil {
+			c.algs.Set(enc.GetName(), enc)
+		}
 	}
 
 	return c
 }
 
 func (c *container) Get(name string) (encryptor, bool) {
-	return c.Get(name)
-}
-
-func withAlgorithm(alg encryptor) func(*container) {
-	return func(c *container) {
-		c.algs.Set(alg.GetName(), alg)
-	}
+	return c.algs.Get(name)
 }

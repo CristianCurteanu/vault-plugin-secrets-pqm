@@ -2,9 +2,11 @@ package secretsengine
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"sync"
 
+	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -25,10 +27,9 @@ type pqBackend struct {
 	*framework.Backend
 	lock sync.RWMutex
 
-	cache *keyVal[string, *encryptionKey]
-	// keyDefs    *keyVal[string, keyGenFunc]
-	// algorithms *keyVal[string, *algorithms]
+	cache               *keyVal[string, *encryptionKey]
 	algorithmsContainer *container
+	logger              hclog.Logger
 }
 
 // NewPqBackend defines the target API NewPqBackend
@@ -37,11 +38,12 @@ type pqBackend struct {
 func NewPqBackend() *pqBackend {
 	var b = pqBackend{
 		cache: newKeyVal[string, *encryptionKey](),
-		algorithmsContainer: newContainer(
-			withAlgorithm(&kyber512{}),
-			withAlgorithm(&kyber768{}),
-			withAlgorithm(&kyber1024{}),
+		algorithmsContainer: newContainer().Register(
+			&kyber512{},
+			&kyber768{},
+			&kyber1024{},
 		),
+		logger: hclog.New(&hclog.LoggerOptions{}),
 	}
 
 	b.Backend = &framework.Backend{
@@ -56,7 +58,6 @@ func NewPqBackend() *pqBackend {
 			// Key management paths
 			b.pathKeys(),
 			b.pathKeysRead(),
-			// b.pathKeysRotate(),
 
 			// // Encryption/Decryption paths
 			b.pathEncrypt(),
@@ -66,6 +67,8 @@ func NewPqBackend() *pqBackend {
 		BackendType: logical.TypeLogical,
 		Invalidate:  b.invalidate,
 	}
+
+	b.logger.Info(fmt.Sprintf("backend initialized: %+v\n", b.algorithmsContainer))
 
 	return &b
 }

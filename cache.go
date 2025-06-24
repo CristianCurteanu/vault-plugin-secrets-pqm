@@ -11,7 +11,10 @@ type keyVal[K comparable, V any] struct {
 }
 
 func newKeyVal[K comparable, V any]() *keyVal[K, V] {
-	return &keyVal[K, V]{mx: &sync.RWMutex{}}
+	return &keyVal[K, V]{
+		mx:      &sync.RWMutex{},
+		storage: map[K]V{},
+	}
 }
 
 func (c *keyVal[K, V]) Set(k K, val V) *keyVal[K, V] {

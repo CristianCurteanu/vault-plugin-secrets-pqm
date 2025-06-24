@@ -19,7 +19,7 @@ func (b *pqBackend) pathKeys() *framework.Path {
 			},
 			"type": {
 				Type:        framework.TypeString,
-				Description: "Type of key (custom-aes256, custom-chacha20, custom-rsa)",
+				Description: "Type of key (kyber-512, kyber-768, kyber-1024)",
 				Default:     "custom-aes256",
 			},
 			"allow_plaintext_backup": {

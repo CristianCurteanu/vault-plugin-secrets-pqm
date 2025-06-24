@@ -173,8 +173,8 @@ func deserialize[V any](encoded []byte) (V, error) {
 		return res, err
 	}
 
-	var encodedBuffer bytes.Buffer
-	decoder := gob.NewDecoder(&encodedBuffer)
+	encodedBuffer := bytes.NewBuffer(data)
+	decoder := gob.NewDecoder(encodedBuffer)
 
 	err = decoder.Decode(&res)
 	if err != nil {
