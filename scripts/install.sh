@@ -1,7 +1,8 @@
 
 
-export RELEASE=v0.0.1-rc1
-export VERSION=vault-plugin-secrets-pqm_0.0.1-rc1_linux_amd64.tar.gz
+export RELEASE="${RELEASE_TAG:-v0.0.1-rc1}"
+export VERSION="${ARCHIVE_FILE:-vault-plugin-secrets-pqm_0.0.1-rc1_linux_amd64.tar.gz}"
+
 export VAULT_PLUGINS=$HOME/.vault-plugins
 
 mkdir -p $VAULT_PLUGINS

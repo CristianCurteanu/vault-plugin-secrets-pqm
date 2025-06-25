@@ -1,4 +1,4 @@
-# vault-plugin-secrets-hashicups
+# vault-plugin-secrets-pqm
 
 This secrets engine enables encryption and decryption using post-quantum algorithms, like kyber.
 
@@ -86,6 +86,12 @@ You can also use the installation script from `script` directory, by running thi
 
 ```sh
 sh scripts/install.sh
+```
+
+Or, with specified tag, or release archive file:
+
+```sh
+RELEASE_TAG=<release-version> ARCHIVE_FILE=<release-archive-file> sh scripts/install.sh
 ```
 
 But, please make sure to run the server first, as this script does not do it.
