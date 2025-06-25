@@ -46,7 +46,7 @@ func (b *pqBackend) pathKeys() *framework.Path {
 	}
 }
 
-// pathKeysWrite handles key creation and updates
+// pathKeysWrite handles key creation and updates of the new keys and key versions
 func (b *pqBackend) pathKeysWrite(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 	name := data.Get("name").(string)
 	keyType := data.Get("type").(string)

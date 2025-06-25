@@ -38,6 +38,7 @@ type pqBackend struct {
 func NewPqBackend() *pqBackend {
 	var b = pqBackend{
 		cache: newKeyVal[string, *encryptionKey](),
+		// The algorithms provided by this plugin are registered here
 		algorithmsContainer: newContainer().Register(
 			&kyber512{},
 			&kyber768{},

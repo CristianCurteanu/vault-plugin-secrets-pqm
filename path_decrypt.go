@@ -72,7 +72,7 @@ func (b *pqBackend) pathDecryptWrite(ctx context.Context, req *logical.Request, 
 		return logical.ErrorResponse("invalid base64 ciphertext"), nil
 	}
 
-	// Decrypt using custom algorithm
+	// Decrypt using custom algorithm, which is selected by key type
 	plaintext, err := b.decrypt(key.Type, version.Key, ciphertextBytes)
 	if err != nil {
 		return nil, fmt.Errorf("decryption failed: %w", err)
@@ -85,7 +85,7 @@ func (b *pqBackend) pathDecryptWrite(ctx context.Context, req *logical.Request, 
 	}, nil
 }
 
-// decrypt decrypts ciphertext using the specified algorithm and key
+// encrypt does select the decryption algorithm by keyType, and invokes it, or returns an error if algorithm is not supported/found
 func (b *pqBackend) decrypt(keyType string, key, ciphertext []byte) ([]byte, error) {
 	encryptor, exists := b.algorithmsContainer.Get(keyType)
 	if !exists {

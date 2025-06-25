@@ -37,6 +37,7 @@ type hybridCiphertext struct {
 	Nonce           []byte // AES-GCM nonce
 }
 
+// kyber512 is an implementation for Kyber-512 encryptor
 type kyber512 struct{}
 
 func (k *kyber512) GetName() string {
@@ -72,6 +73,7 @@ func (k *kyber512) decrypt(key, data []byte) ([]byte, error) {
 	return hybridDecrypt(kbr512.Scheme(), keyPair.PrivateKey, data)
 }
 
+// kyber768 is an implementation for Kyber-768 encryptor
 type kyber768 struct{}
 
 func (k *kyber768) GetName() string {
@@ -107,6 +109,7 @@ func (k *kyber768) decrypt(key, data []byte) ([]byte, error) {
 	return hybridDecrypt(kbr768.Scheme(), keyPair.PrivateKey, data)
 }
 
+// kyber1024 is an implementation for Kyber-1024 encryptor
 type kyber1024 struct{}
 
 func (k *kyber1024) GetName() string {

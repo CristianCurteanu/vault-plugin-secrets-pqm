@@ -68,7 +68,7 @@ func (b *pqBackend) pathEncryptWrite(ctx context.Context, req *logical.Request, 
 		return logical.ErrorResponse("key version not found"), nil
 	}
 
-	// Encrypt using custom algorithm
+	// Encrypt using custom algorithm, which is selected by key type
 	ciphertext, err := b.encrypt(key.Type, version.Key, plaintext)
 	if err != nil {
 		return nil, fmt.Errorf("encryption failed: %w", err)
@@ -85,6 +85,7 @@ func (b *pqBackend) pathEncryptWrite(ctx context.Context, req *logical.Request, 
 	}, nil
 }
 
+// encrypt does select the encryption algorithm by keyType, and invokes it, or returns an error if algorithm is not supported/found
 func (b *pqBackend) encrypt(keyType string, key, plaintext []byte) ([]byte, error) {
 	encryptor, exists := b.algorithmsContainer.Get(keyType)
 	if !exists {
