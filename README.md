@@ -80,6 +80,18 @@ vault secrets enable -path=transit vault-plugin-secrets-pqm
 vault plugin info secret vault-plugin-secrets-pqm
 ```
 
+### Installation script
+
+You can also use the installation script from `script` directory, by running this command:
+
+```sh
+sh scripts/install.sh
+```
+
+But, please make sure to run the server first, as this script does not do it.
+
+It's been tested on Ubuntu linux, but contact me if you have any issues running that script.
+
 ## Usage
 
 There is possibility to use this plugin using HTTP API, using cURL (or any other HTTP requests tool)
